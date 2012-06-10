@@ -28,6 +28,36 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // gebraucht, welches das ende von bufList und parseTree anzeigt. Im Falle des parseTree 
  // koennte es sich um ein token vom tokenType tokenTypeEnd (ggs von tokenTypeBeginning) handeln.
 
+ // das Environment der Funktion sollte das Environment zum Definitionszeitpinkt sein (normal),
+ // koennte aber auch jenes zum Zeitpunkt des Aufrufs sein (ungewoehnlich). Das hiesse dann
+ // dass die gerufene Funktion variablen der rufenden Funktion sehen und ggf. modifizieren kann.
+ // Die Entscheidung sollte dem Entwickler (PL-Lisp Anwender) ueberlassen werden zb durch
+ // Definition des Funktionstyps.
+ 
+ // da envListCurrent sowohl eine Art Stack, als auch das Environment darstellt, ist zu
+ // hinterfragen, ob es sich dabei um eine sinvolle semantische Doppelbelegung handelt.
+ // Es wuerde bedeuten, dass eine definierte Funktion nur auf Symbole zugreifen kann, die
+ // vor ihr definiert wurden. Dies koennte der Programmierer (PL-Lisp Anwender) 
+ // temporaer oder dauernd aendern, indem er das Environment der Funktion nach belieben neu setzt.
+
+ // Es haette auch den Vorteil, dass die Funktion bei bedarf zum Definitionszeitpunkt 
+ // pruefen koennte, ob all ihre enthaltenen symbole auch tatsaechlich bereits existieren.
+ // (auch bei inneren Funktionen, passiert dann bei definition der inneren 
+ // in der aeusseren beim Aufruf der aeusseren zur Laufzeit)
+
+ // Aufgrund dessen, dass die aktuell gerufene Funktion auf den Stack zur Rueckkehr 
+ // und zur Rueckgabe von Werten zugreifen muss, existieren zum Zeitpunkt des Funktionsaufrufs
+ // 2 relevante envList - Datenstrukturen: envListCurrent (pro Thread) und die der Funktion
+ // zugeordnete envList. Kommt der envListPtr  bei der Suche nach einem Symbol an einer Markierung
+ // vorbei, die die Funktion bezeichnet, in der wir uns gerade befinden (ptp), muss er 
+ // (ausser in ausnahmefaellen) dort weitersuchen. Funktioniert auch mit inneren Funktionen.
+ //
+ // def f1
+ //  def f2
+ //  ret f2
+ // call f1 -> fx
+ // call fx
+
  // WEITERBEI
 
  struct parseTree * ptpNext= NULL;
