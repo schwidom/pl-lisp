@@ -58,7 +58,6 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // call f1 -> fx
  // call fx
 
-
  // WEITERBEI
 
  struct parseTree * ptpNext= NULL;
