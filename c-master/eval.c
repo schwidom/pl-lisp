@@ -92,11 +92,20 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // keyword fuer das endgueltige Verlassen der Funktion
 
  // envListCurrent:
- // ( ... funktionskopf begin
- // a b c ... parameter # vorerst anonym
+ // ( ... funktionskopf begin # ein Zeiger muss bereits reserviert sein, der auf den Teil im 
+ //                           # zukuenftigen envListCurrent zeigen soll, der den Returnwert 
+ //                           # beinhalten wird
+ // a b c ... parameter # vorerst anonym bzw. nur als Value getypt, da keine Unterscheidung 
+ //       ... values    # erfolgt, ob ein Ausdruck ein Funktionsparameter  ist, oder nicht
+ //                     # (thread Problem). die Eigenschaften des Threads sollten sich in envListCurrent
+ //                     # befinden, so dass man rausbekommt, ob man sich gerade in einem Macro befindet
+ //                     # oder nicht, in dem Fall koennte man auch zwischen Funktionsparameter und nicht
+ //                     # Funktionsparameter unterscheiden aber ich belasse es bei values. Es ist keine
+ //                     # semantische Doppelbelegung, da die Sorte values sich zwischen funktionskopf 
+ //                     # begin und ende befindet.
  // ) ... funktionskopf end # pruefung der uebergebenen parameter (Anzahl), 
  //                         # uebersetzen der parameter auf die lokalen parameternamen der funktion
- // x y z                   # x=a, y=b, z=x, es erfolgt der eigentliche funktionsaufruf
+ // # implizit:  x y z # x=a, y=b, z=x, es erfolgt der eigentliche funktionsaufruf
 
  // WEITERBEI
 
