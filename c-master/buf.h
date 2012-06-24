@@ -23,14 +23,6 @@ struct bufListPtr
  long contentIdx;
 };
 
-struct envList
-{
- struct envList * prev;
- char * name;
- char * type;
- void * value;
-};
-
 struct bufList * bufListMake( struct bufInfo * bi, struct bufList * prev, struct bufList * next);
 struct envList * envListMake( struct envList * prev, char * name, char * type, void * value);
 

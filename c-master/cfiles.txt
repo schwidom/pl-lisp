@@ -1,5 +1,6 @@
 buf.c
 builtinTypes.c
+env.c
 eval.c
 externals.c
 main.c

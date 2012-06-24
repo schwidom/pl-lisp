@@ -5,6 +5,7 @@
 #include <ctype.h> // isspace
 
 #include "buf.h"
+#include "env.h"
 #include "mem.h"
 #include "externals.h"
 

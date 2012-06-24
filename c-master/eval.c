@@ -19,7 +19,7 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // erfolgt auch keine Operation und der returnwert bleibt derselbe.
 
  // die erkannten zu expandierenden / evaluierenden Symbole sind entweder system-symbole
- // oder im envListCurrent zu finden. wenn der ptp einem befehlspointer entspricht, muesse
+ // oder im envListCurrent zu finden. wenn der ptp einem befehlspointer entspricht, muesste
  // er auf den dortigen entsprechenden Code gesetzt werden. Ist der Code-Typ kein parseTree
  // sondern eine bufList, muss entsprechend der blp gesetzt werden und der ptp entsprechend daraus
  // generiert werden (wie jetzt in der mainloop)
@@ -28,11 +28,11 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // gebraucht, welches das ende von bufList und parseTree anzeigt. Im Falle des parseTree 
  // koennte es sich um ein token vom tokenType tokenTypeEnd (ggs von tokenTypeBeginning) handeln.
 
- // das Environment der Funktion sollte das Environment zum Definitionszeitpinkt sein (normal),
+ // das Environment der Funktion sollte das Environment zum Definitionszeitpunkt sein (normal),
  // koennte aber auch jenes zum Zeitpunkt des Aufrufs sein (ungewoehnlich). Das hiesse dann
- // dass die gerufene Funktion variablen der rufenden Funktion sehen und ggf. modifizieren kann.
+ // dass die gerufene Funktion Variablen der rufenden Funktion sehen und ggf. modifizieren kann.
  // Die Entscheidung sollte dem Entwickler (PL-Lisp Anwender) ueberlassen werden zb durch
- // Definition des Funktionstyps.
+ // Definition des Funktionstyps (vgl. Macro).
  
  // da envListCurrent sowohl eine Art Stack, als auch das Environment darstellt, ist zu
  // hinterfragen, ob es sich dabei um eine sinvolle semantische Doppelbelegung handelt.
@@ -58,6 +58,46 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  // call f1 -> fx
  // call fx
 
+ // die Expansion / Auswertung eines Klammerausdrucks erfolgt mit schliessen der Klammer
+
+ // als naechstes: Auswertung von Symbol und Symbol-Macro (liefert Voraussetzung fuer 
+ // Macros)
+ //
+ // als naechstes: Calling-Convention
+
+ // da Symbole schrittweise ersetzt werden, sind diese vergleichbar mit einem Ausdruck, der einen
+ // returncode hat. folglich werden diese aehnlich behandelt, wie spaeter funktionen: sie hinterlassen
+ // auf dem envListCurrent einen returnwert. Da der envListCurrent aber nicht, wie ein Stack ein Array 
+ // darstellt, sondern eine rueckwaertsverkettete Liste ist, muss genuegend von ihm aus dem aufrufenden 
+ // Context her bekannt sein um den rueckkehrwert zu sehen
+
+ // irgendwie noch unklar: Evaluation vs. Parameteruebergabe (naming)
+ // die an eine Funktion uebergebenen parameter werden zunaechst auf envListCurrent gelegt 
+ // und parameter_1 ... parameter_n benannt. (im falle eines macros ohne evaluation der parameter;
+ // im falle einer funktion muessen die symbole der parameter evaluiert, also ihre rueckgabewerte
+ // gesetzt werden.)
+ // dann mussen fuer die gerufene Funktion vor ihrem eigentlichen Aufruf die positionalen Parameter
+ // erneut gesetzt werden, aber mit dem von der Funktion vorgesehenen Namen
+ // jedenfalls stehen die Parameter vor der Funktion im envListCurrent, was interessant ist, wenn man
+ // die bereits vorhandene Parametrisierung auf eine andere Funktion mit dem selben oder einem kompatiblen
+ // Parameterschema (Prototyp/Head) anwenden will.
+ // Jedenfalls muss der Eintragstyp der Parameter in envListCurrent klar von variablen symbolen
+ // abgegrenzt werden; dazu existiert in struct envList der Eintrag 'char * type' (buf.h)
+ // es fehlen noch die vordefinierten typen
+
+ // auch fuer den rueckkehrwert muss ein entsprechender envList.typ definiert sein, es koennen auf
+ // diesem Wege sogar mehrere Parameter aus unterschiedlichen Stellen zurueckgegeben werden,
+ // jedoch fuer suspend/yield wird noch mehr gebraucht (ggf. eine Art suspendNow, der fuer mehrere
+ // vorangegangene returns die Funktion verlaesst) in jedem fall braechte man dann auch ein klares
+ // keyword fuer das endgueltige Verlassen der Funktion
+
+ // envListCurrent:
+ // ( ... funktionskopf begin
+ // a b c ... parameter # vorerst anonym
+ // ) ... funktionskopf end # pruefung der uebergebenen parameter (Anzahl), 
+ //                         # uebersetzen der parameter auf die lokalen parameternamen der funktion
+ // x y z                   # x=a, y=b, z=x, es erfolgt der eigentliche funktionsaufruf
+
  // WEITERBEI
 
  struct parseTree * ptpNext= NULL;
@@ -72,6 +112,9 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
 
   printf( "evalParseTree %s\n", ptpNext -> tokenType);
   printf( "evalParseTree %s\n", bufListPtr2Str2( ptp -> blp, ptpNext -> blp));
+
+  
+  
 
   ptp = ptpNext;
  }
