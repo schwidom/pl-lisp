@@ -107,6 +107,16 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
  //                         # uebersetzen der parameter auf die lokalen parameternamen der funktion
  // # implizit:  x y z # x=a, y=b, z=x, es erfolgt der eigentliche funktionsaufruf
 
+ // es empfiehlt sich, das Threadproblem durch eine rueckwaertsverkettete ptp - Kapsel ptpc zu 
+ // loesen und nach der implementation zu sehen, ob sich daran irgendwas optimieren laesst. 
+ // In diese Kapsel kaemen alle Variablen rein, die zur Abarbeitung benoetigt werden.
+ // Somit gelingt es dann auch, zu jeder xbeliebigen Position in envListCurrent + ptp zurueckzuspringen, 
+ // und die Abarbeitung von da an zu wiederholen.
+
+ // Wenn wir das mit der Abarbeitung von Opcode auf einer Maschine mit Stack, Speicher und Registern
+ // vergleichen, dann ist envListCurrent StackPointer + Stack, ptp der Befehlspointer und die ptpc
+ // repraesentiert den aktuellen Registersatz und ggf. einen Teil des Speichers
+
  // WEITERBEI
 
  struct parseTree * ptpNext= NULL;
