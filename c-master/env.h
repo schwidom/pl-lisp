@@ -9,3 +9,5 @@ struct envList
 
 extern struct envList * envListCurrent;
 
+extern char * envListTypeRet;
+

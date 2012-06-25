@@ -144,6 +144,19 @@ struct parseTreeContainer * evalParseTree( struct parseTreeContainer * ptpc)
    ptpc= XDUP( struct parseTreeContainer, { prev: ptpc, ptp: ptpNext });
    ptp = ptpc -> ptp; 
   }
+
+  if( tokenTypeWhite != ptp -> tokenType)
+  {
+   envListCurrent= // reservierung, zeigt nach Auswertung des Ausdrucks 
+                   // auf den return-Wert (1) oder eine weiterfuehrende envList (2)
+                   // vorerst nur (1)
+    envListMake( envListCurrent, "", envListTypeRet, NULL);
+  }
+
+  if( tokenTypeNonWhite == ptp -> tokenType)
+  {
+   
+  }
  }
 
 

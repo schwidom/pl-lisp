@@ -16,3 +16,9 @@ void prettyPrintParseTree( struct parseTree * pt, int rekDepth);
 struct parseTree * parseTreeNext( struct parseTree * pt);
 struct parseTree * parseTreePrev( struct parseTree * pt);
 
+extern char * const tokenTypeBeginning;
+extern char * const tokenTypeWhite;
+extern char * const tokenTypeNonWhite;
+extern char * const tokenTypeBraceOpen;
+extern char * const tokenTypeBraceClose;
+

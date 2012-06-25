@@ -2,4 +2,6 @@
 
 struct envList * envListCurrent= NULL;
 
+char * envListTypeRet= "envListTypeRet";
+
 
