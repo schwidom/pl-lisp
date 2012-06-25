@@ -61,6 +61,8 @@ int main( int argc, char** argv)
    struct parseTree * ptBegin= pt;
    //struct parseTreePointer ptp= parseTreePointerMake( ptBegin);
    struct parseTree * ptp= ptBegin; // mehr wird als parseTreePointer nicht benoetigt anfangs
+   //struct parseTreeContainer * ptpc= (struct parseTreeContainer *) xDup( &( (struct parseTreeContainer) { ptp: ptp}), sizeof( struct parseTreeContainer));
+   struct parseTreeContainer * ptpc= XDUP( struct parseTreeContainer, { ptp: ptp});
 
    while( ! bl -> eof)
    {
@@ -76,7 +78,7 @@ int main( int argc, char** argv)
 
     prettyPrintParseTree( ptBegin, 0);
 
-    ptp= evalParseTree( ptp);
+    ptpc= evalParseTree( ptpc);
 
    }
    printf( "bufList2Str blStart\n%s\n", bufList2Str( blStart));

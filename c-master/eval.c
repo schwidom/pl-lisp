@@ -1,6 +1,6 @@
 #include "api.h"
 
-struct parseTree * evalParseTree( struct parseTree * ptp)
+struct parseTreeContainer * evalParseTree( struct parseTreeContainer * ptpc)
 {
 
  // der struct parseTree * ptp Pointer repraesentiert den aktuellen Abarbeitungszustand
@@ -119,6 +119,8 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
 
  // WEITERBEI
 
+ struct parseTree * ptp= ptpc -> ptp;
+
  struct parseTree * ptpNext= NULL;
 
  while( 1)
@@ -135,10 +137,16 @@ struct parseTree * evalParseTree( struct parseTree * ptp)
   
   
 
-  ptp = ptpNext;
+  {
+   //ptp = ptpNext;
+   //ptpc= XDUP( struct parseTreeContainer, { prev: ptpc, ptp: ptp });
+   // bausteleN: die untere Form ist langsamer, aber liefert Fehler eher (abhaengigkeit von ptp zu ptpc erzeugt)
+   ptpc= XDUP( struct parseTreeContainer, { prev: ptpc, ptp: ptpNext });
+   ptp = ptpc -> ptp; 
+  }
  }
 
 
- return ptp;
+ return ptpc;
 }
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> // malloc, size_t, free, realloc
-#include <string.h> // strlen, strcmp, strncat
+#include <string.h> // strlen, strcmp, strncat, memcpy
 #include <assert.h> // assert
 #include <ctype.h> // isspace
 
@@ -29,5 +29,5 @@ struct bufList * readerLoop( FILE * fInputFile, struct bufList * bl);
 
 // eval.c
 
-struct parseTree * evalParseTree( struct parseTree * ptp);
+#include "eval.h"
 
