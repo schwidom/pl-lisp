@@ -147,6 +147,9 @@ struct parseTreeContainer * evalParseTree( struct parseTreeContainer * ptpc)
 
   if( tokenTypeWhite != ptp -> tokenType)
   {
+
+   envListCurrent= envListMake( envListCurrent, "", envListTypePTPC, ptpc); // Kontroll-Eintrag
+
    envListCurrent= // reservierung, zeigt nach Auswertung des Ausdrucks 
                    // auf den return-Wert (1) oder eine weiterfuehrende envList (2)
                    // vorerst nur (1)

@@ -18,6 +18,7 @@ char * const tokenTypeWhite= "tokenTypeWhite";
 char * const tokenTypeNonWhite= "tokenTypeNonWhite";
 char * const tokenTypeBraceOpen= "tokenTypeBraceOpen";
 char * const tokenTypeBraceClose= "tokenTypeBraceClose";
+char * const tokenTypeEnd= "tokenTypeEnd";
 
 struct parseTree * parseTreeMake( struct bufListPtr * blp)
 {

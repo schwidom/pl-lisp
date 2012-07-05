@@ -21,4 +21,5 @@ extern char * const tokenTypeWhite;
 extern char * const tokenTypeNonWhite;
 extern char * const tokenTypeBraceOpen;
 extern char * const tokenTypeBraceClose;
+extern char * const tokenTypeEnd;
 
